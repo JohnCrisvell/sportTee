@@ -1,0 +1,177 @@
+<div class="min-h-screen bg-gradient-to-b from-blue-900 to-blue-300 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto">
+    <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-6 text-center">CART</h1>
+
+    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg sm:text-xl font-semibold text-blue-700">Delivery Address</h2>
+        <button class="bg-blue-600 text-white px-2 py-1 rounded-full text-sm hover:bg-blue-700">
+          <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+        </button>
+      </div>
+      <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+      <input id="address" [(ngModel)]="address" type="text" placeholder="Enter your address" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+    </div>
+
+    <!-- Shopping List or No Orders Message -->
+    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+      <h2 class="text-lg sm:text-xl font-semibold text-blue-700 mb-2">Shopping List</h2>
+      <div *ngIf="cartItems.length === 0" class="text-center text-gray-600 py-4">
+        <p class="text-lg font-medium">No Orders Yet</p>
+        <p class="text-sm">Add items to your cart to proceed with checkout.</p>
+      </div>
+      <div *ngIf="cartItems.length > 0">
+        <div *ngFor="let item of cartItems" class="flex items-center justify-between mb-4">
+          <div class="flex items-center">
+            <img [src]="item.product.image" [alt]="item.product.name" class="w-16 h-16 object-cover rounded-md mr-4" onerror="this.src='assets/fallback.jpg'" />
+            <div>
+              <h3 class="text-sm sm:text-base font-medium">{{ item.product.name }}</h3>
+              <div class="flex items-center text-yellow-400 text-xs sm:text-sm">
+                <span>★★★★☆</span> <span class="text-gray-600 ml-1">4.8</span>
+              </div>
+              <p class="text-green-600 text-sm sm:text-base">₱{{ item.product.price }}</p>
+              <p class="text-red-500 text-xs sm:text-sm line-through">₱{{ item.product.price + 100 }} off</p>
+              <!-- Quantity Controls -->
+              <div class="flex items-center mt-2">
+                <button (click)="decrementQuantity(item.product.name)" class="bg-gray-200 text-gray-700 px-2 py-1 rounded-l hover:bg-gray-300">-</button>
+                <span class="px-4 py-1 border-t border-b">{{ item.quantity }}</span>
+                <button (click)="incrementQuantity(item.product.name)" class="bg-gray-200 text-gray-700 px-2 py-1 rounded-r hover:bg-gray-300">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <p class="text-green-600 text-sm sm:text-base mr-2">₱{{ item.product.price * item.quantity }}</p>
+            <button (click)="deleteItem(item.product.name)" class="text-red-500 hover:text-red-700">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="border-t pt-2">
+          <p class="text-lg sm:text-xl font-semibold">Total Order ({{ cartItems.length }}): <span class="text-green-600">₱{{ total }}</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Proceed to Payment Button (Hidden if Cart is Empty) -->
+    <button *ngIf="cartItems.length > 0" (click)="proceedToPayment()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold shadow-md w-full mb-6">
+      Proceed to Payment
+    </button>
+
+    <!-- Payment Form Modal -->
+    <div *ngIf="showPaymentForm" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4 py-8 overflow-y-auto" (click)="closePaymentForm()">
+      <div class="bg-white rounded-lg shadow-xl p-6 max-w-[90vw] sm:max-w-md w-full relative" (click)="$event.stopPropagation()">
+        <!-- Close Button -->
+        <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700" (click)="closePaymentForm()" aria-label="Close payment form">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+
+        <!-- Payment Form Header and Details -->
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Checkout</h2>
+          <div *ngIf="cartItems.length > 0" class="mb-6">
+            <img [src]="cartItems[0].product.image" [alt]="cartItems[0].product.name" class="w-32 h-32 object-cover mx-auto mb-4 rounded-lg shadow-md" onerror="this.src='assets/fallback.jpg'" />
+            <div class="space-y-2">
+              <p class="text-sm text-gray-600">Order: <span class="font-semibold text-gray-900">₱{{ total }}</span></p>
+              <p class="text-sm text-gray-600">Shipping Fee: <span class="font-semibold text-gray-900">₱50</span></p>
+              <p class="text-lg font-semibold text-gray-900">TOTAL: <span class="text-green-600">₱{{ total + 50 }}</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method Options -->
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Select Payment Method</h3>
+          <div class="space-y-4">
+            <!-- Visa -->
+            <label class="flex items-center justify-between cursor-pointer">
+              <div class="flex items-center space-x-4">
+                <img src="assets/visa.png" alt="Visa" class="w-10 h-10" />
+                <span class="text-sm text-gray-700">Visa</span>
+              </div>
+              <input type="radio" [(ngModel)]="selectedPaymentMethod" value="visa" name="paymentMethod" class="form-radio text-blue-600 h-5 w-5 focus:ring-blue-500" />
+            </label>
+            <!-- BDO -->
+            <label class="flex items-center justify-between cursor-pointer">
+              <div class="flex items-center space-x-4">
+                <img src="assets/bdo.jpg" alt="BDO" class="w-10 h-10" />
+                <span class="text-sm text-gray-700">BDO</span>
+              </div>
+              <input type="radio" [(ngModel)]="selectedPaymentMethod" value="bdo" name="paymentMethod" class="form-radio text-blue-600 h-5 w-5 focus:ring-blue-500" />
+            </label>
+            <!-- GCash -->
+            <label class="flex items-center justify-between cursor-pointer">
+              <div class="flex items-center space-x-4">
+                <img src="assets/gcash.png" alt="GCash" class="w-10 h-10" />
+                <span class="text-sm text-gray-700">GCash</span>
+              </div>
+              <input type="radio" [(ngModel)]="selectedPaymentMethod" value="gcash" name="paymentMethod" class="form-radio text-blue-600 h-5 w-5 focus:ring-blue-500" />
+            </label>
+            <!-- Cash on Delivery (COD) -->
+            <label class="flex items-center justify-between cursor-pointer">
+              <div class="flex items-center space-x-4">
+                <img src="assets/cod.jpg" alt="Cash on Delivery" class="w-10 h-10" />
+                <span class="text-sm text-gray-700">Cash on Delivery</span>
+              </div>
+              <input type="radio" [(ngModel)]="selectedPaymentMethod" value="cod" name="paymentMethod" class="form-radio text-blue-600 h-5 w-5 focus:ring-blue-500" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Confirm Payment Button -->
+        <button (click)="confirmPayment()" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold shadow-md flex items-center justify-center">
+          <span *ngIf="!isProcessing">Confirm Payment</span>
+          <span *ngIf="isProcessing" class="flex items-center">
+            <svg class="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+            </svg>
+            Processing...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg flex justify-around py-3 text-sm text-gray-600 max-w-6xl mx-auto animate-slide-up">
+    <div class="flex flex-col items-center text-red-500 cursor-pointer transform transition duration-300 hover:scale-110 hover:text-blue-700" (click)="navigateToDashboard()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+      </svg>
+      <span>Home</span>
+    </div>
+    <div class="flex flex-col items-center cursor-pointer transform transition duration-300 hover:scale-110 hover:text-blue-700" (click)="navigateTo('wishlist')">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+      </svg>
+      <span>Wishlist</span>
+    </div>
+    <div class="flex flex-col items-center cursor-pointer transform transition duration-300 hover:scale-110 hover:text-blue-700" (click)="navigateTo('checkout')">
+      <div class="relative">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+        </svg>
+        <span class="absolute -top-1 -right-2 bg-red-500 text-xs rounded-full px-1.5 py-0.5">1</span>
+      </div>
+      <span>Cart</span>
+    </div>
+    <div class="flex flex-col items-center cursor-pointer transform transition duration-300 hover:scale-110 hover:text-blue-700" (click)="navigateTo('search')">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1016.65 16.65z"></path>
+      </svg>
+      <span>Search</span>
+    </div>
+    <div class="flex flex-col items-center cursor-pointer transform transition duration-300 hover:scale-110 hover:text-blue-700" (click)="navigateTo('profile')">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+      <span>Profile</span>
+    </div>
+  </nav>
+</div>

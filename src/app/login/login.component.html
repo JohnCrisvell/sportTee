@@ -1,0 +1,74 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-900 to-blue-300 text-black px-4 py-6 sm:px-6">
+  <!-- Back Arrow -->
+  <a [routerLink]="['/']" class="mb-6 self-start">
+    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </a>
+
+  <!-- Welcome Text -->
+  <h1 class="text-4xl font-bold mb-8">Welcome Back!</h1>
+
+  <!-- Input Fields -->
+  <div class="space-y-4 mb-4 w-full max-w-xs">
+    <div class="relative">
+      <input type="text" placeholder="Username or Email" [(ngModel)]="email" name="email" class="w-full py-3 pl-10 pr-4 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+    </div>
+    <div class="relative">
+      <input type="password" placeholder="Password" [(ngModel)]="password" name="password" class="w-full py-3 pl-10 pr-12 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 2c-1.104 0-2 .896-2 2v3h4v-3c0-1.104-.896-2-2-2zm-6 2v3h2v-3c0-1.104-.896-2-2-2s-2 .896-2 2zm12 0c-1.104 0-2 .896-2 2v3h4v-3c0-1.104-.896-2-2-2z"></path>
+      </svg>
+      <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Forgot Password Link -->
+  <a [routerLink]="['/forget-password']" class="text-sm text-gray-700 self-end mb-6">Forgot Password?</a>
+
+  <a 
+    (click)="onLogin()" 
+    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-full mb-6 w-full max-w-xs text-center block">
+    Log In
+  </a>
+
+  <!-- Social Login Divider -->
+  <div class="flex items-center mb-6 w-full max-w-xs">
+    <div class="flex-grow border-t border-gray-400"></div>
+    <span class="mx-4 text-sm text-gray-700">Or Log in with</span>
+    <div class="flex-grow border-t border-gray-400"></div>
+  </div>
+
+  <!-- Social Login Buttons -->
+  <div class="flex justify-center space-x-4 mb-6 w-full max-w-xs">
+    <button class="bg-white p-3 rounded-lg flex-1">
+      <svg class="w-6 h-6 text-blue-600 mx-auto" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
+      </svg>
+    </button>
+    <button class="bg-white p-3 rounded-lg flex-1">
+      <svg class="w-6 h-6 text-black mx-auto" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10S6.486 2 12 2zm0-2C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-1.5 6.5c-.828 0-1.5.672-1.5 1.5s.672 1.5 1.5 1.5 1.5-.672 1.5-1.5-.672-1.5-1.5-1.5zm0 9c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm5-5c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/>
+      </svg>
+    </button>
+    <button class="bg-white p-3 rounded-lg flex-1">
+      <svg class="w-6 h-6 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L12 9.66 7.41 7.58 6 9l6 4 6-4-1.41-1.42z" fill="#4285F4"/>
+        <path d="M12 13l-6-4v7h12v-7l-6 4z" fill="#34A853"/>
+        <path d="M12 13l6-4V9l-6 4-6-4v1l6 4z" fill="#FBBC05"/>
+        <path d="M12 13l-6-4V9l6 4 6-4v1l-6 4z" fill="#EA4335"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Register Link -->
+  <p class="text-center text-sm w-full max-w-xs">
+    Don't have an account? <a [routerLink]="['/register']" class="text-blue-500 underline">Register Now</a>
+  </p>
+</div>

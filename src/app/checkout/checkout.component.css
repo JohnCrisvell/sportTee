@@ -1,0 +1,9 @@
+/* Ensure the bottom nav stays above other content */
+nav {
+    z-index: 40;
+  }
+  
+  /* Smooth transition for hover effects */
+  .hover\:text-blue-700:hover {
+    transition: color 0.3s ease;
+  }

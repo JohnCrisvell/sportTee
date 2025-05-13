@@ -1,0 +1,17 @@
+<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-900 to-blue-300 text-white px-4 py-6 sm:px-6">
+  <!-- Logo Section -->
+  <div class="flex flex-col items-center mb-4">
+    <div class="w-44 h-44mb-2">
+      <img src="assets/logo.png" alt="Sport Tee Logo" class="w-full h-full object-contain" />
+    </div>
+    <h1 class="text-4xl font-bold">Sport Tee</h1>
+  </div>
+
+  <a [routerLink]="['/register']" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-24 rounded-full mb-4 w-full max-w-xs text-center">
+    REGISTER
+  </a>
+
+  <div class="flex flex-col space-y-2 text-sm w-full max-w-xs text-center">
+    <a [routerLink]="['/login']" class="underline">Already a user? Log In</a>
+  </div>
+</div>

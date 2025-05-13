@@ -1,0 +1,10 @@
+/* Fine-tune the gradient and layout */
+.bg-gradient-to-b {
+  background: linear-gradient(to bottom, #1e3a8a, #93c5fd);
+}
+
+@media (max-width: 640px) {
+  .max-w-xs {
+    width: 90%;
+  }
+}
